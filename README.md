@@ -1,70 +1,120 @@
-# College Complaint Management System — CampusVoice
+# CampusVoice — Student Complaint Management System
 
-CampusVoice is a fully responsive, secure full-stack platform built with **Next.js**, **Express**, **Zustand**, and **MongoDB** mapping role-based complaint reporting, triage, workload delegation, and resolution logs.
+## Problem Statement
+
+Colleges often rely on manual, informal channels — paper forms, WhatsApp groups, or word-of-mouth — to handle student complaints about campus facilities like classrooms, hostels, Wi-Fi, cleanliness, and transportation. This makes it hard for students to track progress and for administrators to prioritize, assign, and resolve issues efficiently. 
+
+**CampusVoice** replaces this manual process with a centralized digital platform where students can submit complaints with evidence, track their status in real time, and administrators can review, assign, prioritize, and resolve issues — all with a full audit trail.
 
 ---
 
-## Project Architecture
+## Features
 
+### Core Features
+- Student registration and login with JWT-based authentication.
+- Complaint submission with category, location, detailed description, and file/image attachment.
+- Complaint status tracking: `Submitted` ➔ `Under Review` ➔ `Assigned` ➔ `In Progress` ➔ `Resolved` ➔ `Closed`.
+- Student dashboard showing complaint history and current status.
+- Admin console to view, search, and filter all complaints.
+- Department/staff workload assignment for each complaint.
+- Priority levels: `Low` / `Medium` / `High` / `Critical`.
+- Admin comments and resolution details.
+- Full CRUD API for complaints management.
+- Basic complaint statistics aggregations (total filed, in progress, resolved).
+
+### Bonus Features
+- Role-based access control (Student / Admin / Staff).
+- Responsive, clean operator-console UI with Light/Dark mode switcher.
+- Search and filter by status, category, and priority.
+- Local file upload support for complaint attachments.
+
+---
+
+## Technology Stack
+
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend** | Next.js, React, Tailwind CSS, Axios, Zustand |
+| **Backend** | Node.js, Express.js |
+| **Database** | MongoDB (MongoDB Atlas) |
+| **Authentication** | JSON Web Tokens (JWT), bcrypt for password hashing |
+| **File Uploads** | Multer (local storage; Cloudinary-ready) |
+| **Deployment** | Vercel (frontend), Render (backend), MongoDB Atlas (database) |
+
+---
+
+## Screenshots
+
+### Login Page
+![Login Page Screenshot](docs/screenshots/login.png)
+
+### Student Dashboard
+![Student Dashboard Screenshot](docs/screenshots/dashboard.png)
+
+---
+
+## Live Demo
+
+- **Frontend (Vercel):** [https://student-complaint-management-system-delta.vercel.app](https://student-complaint-management-system-delta.vercel.app)
+- **Backend API (Render):** [https://student-complaint-management-system-0bca.onrender.com](https://student-complaint-management-system-0bca.onrender.com)
+
+> [!NOTE]
+> The backend is hosted on Render's free tier, which spins down after periods of inactivity. The first request after idle time may take 30–60 seconds to respond.
+
+---
+
+## Setup Instructions
+
+To run this project locally:
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/aashritha203/student-complaint-management-system.git
+cd student-complaint-management-system
 ```
-student managemnt/
-├── client/          # Next.js React Frontend App
-│   ├── src/
-│   │   ├── components/  # Layout, StatusBadges, FileUpload preview loaders
-│   │   ├── pages/       # Login, Register, Dashboards, incidents triage
-│   │   ├── store/       # Zustand auth persistence slices
-│   │   └── utils/       # Custom instance Axios API
-├── server/          # Node.js + Express REST API Server
-│   ├── uploads/     # Local static attachments storage directory
-│   ├── src/
-│   │   ├── config/      # Database connect wrappers & Cloudinary setup
-│   │   ├── controllers/ # Auth, Complaints, and Admin metrics logic
-│   │   ├── models/      # Mongoose schemas: User, Complaint, Comment
-│   │   ├── routes/      # Express endpoint mappings
-│   │   └── services/    # Business rules handlers
+
+### 2. Install backend dependencies
+```bash
+cd server
+npm install
 ```
 
----
+### 3. Install frontend dependencies
+```bash
+cd ../client
+npm install
+```
 
-## Deployment & Setup Instructions
+### 4. Configure Environment Variables
+Create a local config `.env` inside `server/` and a `.env.local` inside `client/` (see the Keys list below).
 
-### 1. Prerequisite Environments
-- **Node.js** (v18+ recommended)
-- **MongoDB** Instance (Atlas Cluster URI or local daemon)
+### 5. Run the Backend
+```bash
+cd server
+npm run dev
+```
+*Server runs at `http://localhost:5000`*
 
-### 2. Backend Config & Boot
-1. Navigate to the backend directory:
-   ```bash
-   cd server
-   ```
-2. Configure your environment properties in standard format inside **`server/.env`**:
-   ```env
-   PORT=5000
-   MONGO_URI=mongodb+srv://aashritha203_db_user:lY1tF6esMzVIvS78@complaintmanagement.ejfeorl.mongodb.net/?appName=complaintmanagement
-   JWT_SECRET=supersecretjwtsecretkeyforcollegesystem12345
-   ```
-3. Boot the backend server instance locally:
-   ```bash
-   npm run dev
-   ```
-   *Expected outcome: `Server listening on port 5000` & `MongoDB Connected: <cluster_host>`*
-
-### 3. Frontend Client Setup & Boot
-1. Navigate to the client directory:
-   ```bash
-   cd ../client
-   ```
-2. Launch the Next.js development client server:
-   ```bash
-   npm run dev
-   ```
-   *The application will boot at **`http://localhost:3000`***
+### 6. Run the Frontend
+In a separate terminal process window:
+```bash
+cd client
+npm run dev
+```
+*Frontend runs at `http://localhost:3000`*
 
 ---
 
-## Workflow Guide
+## Environment Variables
 
-### Role Accounts Designation
-1. **Admin User:** The system checks credentials role inputs. Open `/register` to create your master administrator or staff account.
-2. **Student Account:** Sign up as a `student` to file complaint logs, attach images/PDF proofs, view track timelines, and post comments.
-3. **Staff Triage:** Staff or admin logs in to see the overview graphs, search/filter tickets, assign personnel to cases, edit severity, and append resolution summaries.
+### Backend (`server/.env`)
+- `PORT` - Local server port (default `5000`)
+- `MONGO_URI` - MongoDB connection cluster string
+- `JWT_SECRET` - Key to sign web tokens
+- `CLOUDINARY_CLOUD_NAME` - Cloudinary cloud credential name
+- `CLOUDINARY_API_KEY` - Cloudinary API credential key
+- `CLOUDINARY_API_SECRET` - Cloudinary API credential secret
+- `FRONTEND_URL` - Production Vercel web URL whitelist for CORS
+
+### Frontend (`client/.env.local`)
+- `NEXT_PUBLIC_API_URL` - Render API service URL
