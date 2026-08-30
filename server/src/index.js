@@ -40,6 +40,32 @@ app.use(morgan('dev'));
 // Static assets folder for local attachment fallback uploads
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
+// Root status page endpoint
+app.get('/', (req, res) => {
+  res.send(`<!DOCTYPE html>
+<html>
+<head>
+  <title>CampusVoice API</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 80px 20px; background: #0f172a; color: white; }
+    h1 { color: #818cf8; font-size: 32px; }
+    .status { display: inline-block; background: #16a34a; color: white; padding: 6px 16px; border-radius: 20px; font-weight: bold; margin-top: 10px; }
+    .info { color: #94a3b8; margin-top: 20px; font-size: 14px; }
+    .card { max-width: 500px; margin: 0 auto; background: #1e293b; padding: 40px; border-radius: 16px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>CampusVoice API</h1>
+    <p>College Complaint Management System — Backend Server</p>
+    <span class="status">● LIVE</span>
+    <p class="info">This is the backend API server. It powers the CampusVoice frontend application and is not meant to be used directly in a browser.</p>
+    <p class="info">Frontend: <a href="https://student-complaint-management-system-delta.vercel.app" style="color:#818cf8;">Visit CampusVoice App</a></p>
+  </div>
+</body>
+</html>`);
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
